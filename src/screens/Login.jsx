@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,16 +10,31 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-
+import app from '../firebase'
+import { useHistory } from 'react-router-dom'
+import AuthContext from '../contexts/Auth';
 function Login() {
+    const history = useHistory();
+    const [message, setMessage] = useState("")
     const [user, setUser] = useState({ email: "", password: "" })
-    const connect = () => {
-        console.log("connected as ", user)
-    }
+
     const changeHandler = (k, v) => {
         setUser({
             ...user, [k]: v
         })
+    }
+    const submit = async () => {
+        try {
+            await app.auth().signInWithEmailAndPassword(user.email, user.password)
+            history.push('/aaaa');
+        }
+        catch (error) {
+            setMessage(error.message)
+        }
+    }
+    const { currentUser } = useContext(AuthContext);
+    if (currentUser) {
+
     }
 
     function Copyright() {
@@ -78,8 +93,8 @@ function Login() {
                     <Typography component="h1" variant="h5">
                         Sign in
                     </Typography>
-                   
-                        <div className={classes.form} >
+
+                    <div className={classes.form} >
                         <TextField
                             value={user.email}
                             onChange={(e) => changeHandler('email', e.target.value)}
@@ -112,7 +127,7 @@ function Login() {
                             variant="contained"
                             color="primary"
                             className={classes.submit}
-                            onClick={() => connect()}
+                            onClick={() => submit()}
                         >
                             Sign In
                         </Button>
@@ -121,7 +136,10 @@ function Login() {
                             <Copyright />
                         </Box>
                     </div>
-                       
+
+                </div>
+                <div className="message">
+                    {message}
                 </div>
             </Grid>
         </Grid>

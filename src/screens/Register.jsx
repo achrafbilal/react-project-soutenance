@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import Button from '@material-ui/core/Button';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -10,17 +10,17 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import app from '../firebase';
-
-
+import app from '../firebase'
+import { useHistory } from 'react-router-dom'
 
 
 
 
 
 function Register() {
-    const auth = app.auth();
-    console.log(auth)
+    const history = useHistory();
+    const [message, setMessage] = useState("")
+
     const [valid, setValid] = useState(false)
 
     const [user, setUser] = useState({ email: "", password: "", confirmation: "" })
@@ -29,13 +29,18 @@ function Register() {
         setUser({
             ...user, [k]: v
         })
-
-        setValid(user.password === user.confirmation)
-
     }
-    const handleSubmit = () => {
-        setValid(user.password === user.confirmation)
-        //if (valid) register(user.email, user.password)
+    const handleSubmit = async e => {
+        if (valid) {
+            try {
+                await app.auth().createUserWithEmailAndPassword(user.email, user.password)
+                history.push('/login')
+            }
+            catch (error) {
+                setMessage(error.message)
+            }
+        }
+
     }
 
     function Copyright() {
@@ -84,6 +89,17 @@ function Register() {
         }
     }));
     const classes = useStyles();
+
+
+
+    useEffect(() => {
+        if (user.confirmation !== user.password) setMessage("Passwords are not the same")
+        else {
+            setValid(true)
+            setMessage("")
+        }
+    }, [user])
+
     return (
         <Grid container component="main" className={classes.root}>
             <CssBaseline />
@@ -158,7 +174,11 @@ function Register() {
                         </Box>
                     </div>
                 </div>
+                <div className="message">
+                    {message}
+                </div>
             </Grid>
+
         </Grid>
     );
 }
