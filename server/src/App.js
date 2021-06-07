@@ -9,7 +9,7 @@ function App() {
   const [auth, setAuth] = React.useState({ username: "", password: "" })
   const [sideOn, setSideOn] = React.useState(false)
   const connected = () => {
-    return (auth.username === "achraf" && auth.password === "achraf") | 1
+    return (auth.username === "achraf" && auth.password === "achraf") | 0
   }
   // setInterval(() => {
   //   return
