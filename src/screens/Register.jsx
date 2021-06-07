@@ -10,8 +10,7 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-// import { useAuth } from '../contexts/AuthContext'
-import { red } from '@material-ui/core/colors';
+import app from '../firebase';
 
 
 
@@ -20,8 +19,10 @@ import { red } from '@material-ui/core/colors';
 
 
 function Register() {
+    const auth = app.auth();
+    console.log(auth)
     const [valid, setValid] = useState(false)
-    // const { register } = useAuth();
+
     const [user, setUser] = useState({ email: "", password: "", confirmation: "" })
 
     const changeHandler = (k, v) => {
@@ -29,10 +30,12 @@ function Register() {
             ...user, [k]: v
         })
 
+        setValid(user.password === user.confirmation)
+
     }
     const handleSubmit = () => {
         setValid(user.password === user.confirmation)
-        // if (valid) register(user.email, user.password)
+        //if (valid) register(user.email, user.password)
     }
 
     function Copyright() {
@@ -77,7 +80,7 @@ function Register() {
             margin: theme.spacing(3, 0, 2),
         },
         invalid_input: {
-            borderColor: red
+            borderColor: '#ff00ff'
         }
     }));
     const classes = useStyles();
@@ -111,7 +114,7 @@ function Register() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                    value={user.email}
+                                    value={user.password}
                                     onChange={(e) => changeHandler('password', e.target.value)}
                                     variant="outlined"
                                     required
@@ -125,8 +128,8 @@ function Register() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
-                                    className={valid ? '' : classes.invalid_input}
-                                    value={user.email}
+                                    className={valid ? '' : 'red'}
+                                    value={user.confirmation}
                                     onChange={(e) => changeHandler('confirmation', e.target.value)}
                                     variant="outlined"
                                     required
