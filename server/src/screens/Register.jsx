@@ -10,7 +10,8 @@ import Grid from '@material-ui/core/Grid';
 import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
-import { Checkbox, FormControlLabel } from '@material-ui/core';
+// import { useAuth } from '../contexts/AuthContext'
+import { red } from '@material-ui/core/colors';
 
 
 
@@ -19,14 +20,19 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
 
 
 function Register() {
-    const [user, setUser] = useState({ email: "", password: "" })
-    const connect = () => {
-        console.log("connected as ", user)
-    }
+    const [valid, setValid] = useState(false)
+    // const { register } = useAuth();
+    const [user, setUser] = useState({ email: "", password: "", confirmation: "" })
+
     const changeHandler = (k, v) => {
         setUser({
             ...user, [k]: v
         })
+
+    }
+    const handleSubmit = () => {
+        setValid(user.password === user.confirmation)
+        // if (valid) register(user.email, user.password)
     }
 
     function Copyright() {
@@ -41,7 +47,6 @@ function Register() {
             </Typography>
         );
     }
-    //backgroundImage: 'url(https://source.unsplash.com/random)',
     const useStyles = makeStyles((theme) => ({
         root: {
             height: '93vh',
@@ -71,6 +76,9 @@ function Register() {
         submit: {
             margin: theme.spacing(3, 0, 2),
         },
+        invalid_input: {
+            borderColor: red
+        }
     }));
     const classes = useStyles();
     return (
@@ -88,31 +96,10 @@ function Register() {
 
                     <div className={classes.form} >
                         <Grid container spacing={2}>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    autoComplete="fname"
-                                    name="firstName"
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="firstName"
-                                    label="First Name"
-                                    autoFocus
-                                />
-                            </Grid>
-                            <Grid item xs={12} sm={6}>
-                                <TextField
-                                    variant="outlined"
-                                    required
-                                    fullWidth
-                                    id="lastName"
-                                    label="Last Name"
-                                    name="lastName"
-                                    autoComplete="lname"
-                                />
-                            </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    value={user.email}
+                                    onChange={(e) => changeHandler('email', e.target.value)}
                                     variant="outlined"
                                     required
                                     fullWidth
@@ -124,6 +111,8 @@ function Register() {
                             </Grid>
                             <Grid item xs={12}>
                                 <TextField
+                                    value={user.email}
+                                    onChange={(e) => changeHandler('password', e.target.value)}
                                     variant="outlined"
                                     required
                                     fullWidth
@@ -134,13 +123,30 @@ function Register() {
                                     autoComplete="current-password"
                                 />
                             </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    className={valid ? '' : classes.invalid_input}
+                                    value={user.email}
+                                    onChange={(e) => changeHandler('confirmation', e.target.value)}
+                                    variant="outlined"
+                                    required
+                                    fullWidth
+                                    name="password-confirmation"
+                                    label="Password confirmation"
+                                    type="password"
+                                    id="confirmation"
+                                    autoComplete="current-password"
+                                />
+                            </Grid>
                         </Grid>
                         <Button
+                            disabled={!valid}
                             type="submit"
                             fullWidth
                             variant="contained"
                             color="primary"
                             className={classes.submit}
+                            onClick={handleSubmit}
                         >
                             Sign Up
                         </Button>
