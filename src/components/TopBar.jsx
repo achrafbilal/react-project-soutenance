@@ -5,7 +5,7 @@ import MenuIcon from '@material-ui/icons/Menu';
 
 
 
-function TopBar({ auth, openSidebar }) {
+function TopBar({ auth, openSidebar, logout }) {
     const Links = (auth) => {
         if (!auth.auth)
             return (
@@ -31,7 +31,10 @@ function TopBar({ auth, openSidebar }) {
                 <Nav className="me-auto">
                     <Nav.Link as={NavLink} to="/login" exact >
                         Servers
-            </Nav.Link>
+                    </Nav.Link>
+                    <Nav.Link as={Button} onClick={() => logout()} to="/login" exact >
+                        Logout
+                    </Nav.Link>
                 </Nav>
 
             </Container >

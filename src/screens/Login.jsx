@@ -12,8 +12,8 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import app from '../firebase'
 import { useHistory } from 'react-router-dom'
-import AuthContext from '../contexts/Auth';
-function Login() {
+import { AuthContext } from '../contexts/Auth';
+function Login({ setAuth }) {
     const history = useHistory();
     const [message, setMessage] = useState("")
     const [user, setUser] = useState({ email: "", password: "" })
@@ -33,8 +33,9 @@ function Login() {
         }
     }
     const { currentUser } = useContext(AuthContext);
+    console.log(currentUser)
     if (currentUser) {
-
+        setAuth(currentUser)
     }
 
     function Copyright() {

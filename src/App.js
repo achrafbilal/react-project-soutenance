@@ -6,11 +6,14 @@ import Login from "./screens/Login";
 import Register from "./screens/Register";
 import Home from "./screens/Home";
 import { AuthProvider } from './contexts/Auth'
+import app from './firebase'
+import { useHistory } from 'react-router-dom'
 function App() {
-  const [auth, setAuth] = React.useState({ username: "", password: "" })
+  const history = useHistory();
+  const [auth, setAuth] = React.useState(null)
   const [sideOn, setSideOn] = React.useState(false)
   const connected = () => {
-    return (auth.username === "achraf" && auth.password === "achraf") | 0
+    return (auth !== null)
   }
 
   const openSidebar = () => {
@@ -18,12 +21,17 @@ function App() {
   }
   const close = () => {
     setSideOn(false);
+  }
+  const logout = () => {
 
+    app.auth().signOut()
+    history.push('/login')
+    //setAuth(null)
   }
   return (
     <AuthProvider>
       <Router>
-        <TopBar auth={connected} openSidebar={openSidebar} />
+        <TopBar auth={connected} openSidebar={openSidebar} logout={logout} />
         <LeftBar show={sideOn} close={close} />
         <Switch className="switch">
           <Route path="/" exact>
@@ -48,7 +56,7 @@ function App() {
             <div className="app">={setAuth}
               <h1>
                 <center>
-                  {connected() ? <Redirect to="/" /> : <Register   />}
+                  {connected() ? <Redirect to="/" /> : <Register setAuth={setAuth} />}
                 </center>
               </h1>
             </div>
