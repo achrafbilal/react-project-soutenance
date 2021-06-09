@@ -2,10 +2,18 @@ import React from 'react'
 import { Navbar, Container, Nav, Button } from 'react-bootstrap'
 import { NavLink } from 'react-router-dom'
 import MenuIcon from '@material-ui/icons/Menu';
+import { useHistory } from 'react-router-dom'
 
 
 
 function TopBar({ auth, openSidebar, logout }) {
+
+    const history = useHistory();
+    const logoutHandler = () => {
+        logout();
+        window.location.href = "/login"
+
+    }
     const Links = (auth) => {
         if (!auth.auth)
             return (
@@ -32,7 +40,7 @@ function TopBar({ auth, openSidebar, logout }) {
                     <Nav.Link as={NavLink} to="/login" exact >
                         Servers
                     </Nav.Link>
-                    <Nav.Link as={Button} onClick={() => logout()} to="/login" exact >
+                    <Nav.Link as={Button} onClick={() => logoutHandler()} to="/login" exact >
                         Logout
                     </Nav.Link>
                 </Nav>

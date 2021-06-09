@@ -9,7 +9,6 @@ import { AuthProvider } from './contexts/Auth'
 import app from './firebase'
 import { useHistory } from 'react-router-dom'
 function App() {
-  const history = useHistory();
   const [auth, setAuth] = React.useState(null)
   const [sideOn, setSideOn] = React.useState(false)
   const connected = () => {
@@ -25,13 +24,11 @@ function App() {
   const logout = () => {
 
     app.auth().signOut()
-    history.push('/login')
-    //setAuth(null)
   }
   return (
     <AuthProvider>
-      <Router>
-        <TopBar auth={connected} openSidebar={openSidebar} logout={logout} />
+      <Router >
+        <TopBar auth={connected} openSidebar={openSidebar} user logout={logout} />
         <LeftBar show={sideOn} close={close} />
         <Switch className="switch">
           <Route path="/" exact>
@@ -53,7 +50,7 @@ function App() {
             </div>
           </Route>
           <Route path="/register" exact>
-            <div className="app">={setAuth}
+            <div className="app">
               <h1>
                 <center>
                   {connected() ? <Redirect to="/" /> : <Register setAuth={setAuth} />}

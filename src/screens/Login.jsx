@@ -26,7 +26,7 @@ function Login({ setAuth }) {
     const submit = async () => {
         try {
             await app.auth().signInWithEmailAndPassword(user.email, user.password)
-            history.push('/aaaa');
+            history.push('/');
         }
         catch (error) {
             setMessage(error.message)

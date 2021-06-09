@@ -1,12 +1,10 @@
 import { } from '@material-ui/core';
-import React, { useState } from 'react'
-import { Button, Container, ListGroup, Card } from 'react-bootstrap'
+import React, { } from 'react'
+import { Button, ListGroup, Card } from 'react-bootstrap'
 import Server from './Server';
 
 function LeftBar({ show, close }) {
-    const keypressHandler = (e) => {
-        console.log(e)
-    }
+
     const servers = [
         {
             owner: "achraf", id: 1, name: "maroc"
@@ -43,7 +41,7 @@ function LeftBar({ show, close }) {
 
                 </Card.Body>
             </Card>
-        </div >
+        </div>
     )
 }
 
